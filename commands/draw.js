@@ -9,15 +9,15 @@ module.exports = {
             .setDescription('prompt')
             .setRequired(true))
         .addIntegerOption(option => option
-            .setName('batch')
+            .setName('pics')
             .setDescription('batch_size')
             .setMinValue(1)
-            .setMaxValue(100))
+            .setMaxValue(9))
         .addIntegerOption(option => option
             .setName('steps')
             .setDescription('steps')
             .setMinValue(1)
-            .setMaxValue(100))
+            .setMaxValue(50))
         .addNumberOption(option => option
             .setName('denoising')
             .setDescription('denoising_strength')
@@ -33,7 +33,7 @@ module.exports = {
             .setMaxValue(1024))
         .addIntegerOption(option => option
             .setName('height')
-            .setDescription('width')
+            .setDescription('height')
             .setMinValue(1)
             .setMaxValue(1024)),
     /**
@@ -42,12 +42,12 @@ module.exports = {
      */
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const batch_size = interaction.options.getInteger('batch') ?? 1; // default = 1
+        const batch_size = interaction.options.getInteger('pics') ?? 2; // default = 2
         const steps = interaction.options.getInteger('steps') ?? 10;
         const denoising = interaction.options.getNumber('denoising') ?? 0.7;
         const negative_prompt = interaction.options.getString('negative');
         const width = interaction.options.getInteger('width') ?? 512;
-        const height = interaction.options.getInteger('heiight') ?? 768;
+        const height = interaction.options.getInteger('height') ?? 768;
         await interaction.deferReply();
 
         const request = {
@@ -74,8 +74,11 @@ module.exports = {
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
         const data = await response.json();
         console.log(data.parameters);
-        const buff = new Buffer.from(data.images[0], 'base64');
-        await interaction.editReply({ content: prompt, files: [{ attachment: buff }] }); // 现在只会发一张图片
+        const buff = [];
+        for (pic of data.images) {
+            buff.push(new Buffer.from(pic, 'base64'));
+        }
+        await interaction.editReply({ content: prompt, files: buff });
 
     }
 }
