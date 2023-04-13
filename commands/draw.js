@@ -28,15 +28,14 @@ module.exports = {
             .setDescription('negative_prompt'))
         .addIntegerOption(option => option
             .setName('width')
-            .setDescription('width'))
+            .setDescription('width')
             .setMinValue(1)
-            .setMaxValue(1024)
+            .setMaxValue(1024))
         .addIntegerOption(option => option
             .setName('height')
             .setDescription('width')
             .setMinValue(1)
-            .setMaxValue(1024)
-        ),
+            .setMaxValue(1024)),
     /**
      * 
      * @param {ChatInputCommandInteraction} interaction 
