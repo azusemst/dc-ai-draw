@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChatInputCommandInteraction, } = require('discord.js');
+const { SlashCommandBuilder, ChatInputCommandInteraction } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,7 +17,15 @@ module.exports = {
             .setName('steps')
             .setDescription('steps')
             .setMinValue(1)
-            .setMaxValue(100)),
+            .setMaxValue(100))
+        .addNumberOption(option => option
+            .setName('denoising')
+            .setDescription('denoising_strength')
+            .setMinValue(0)
+            .setMaxValue(1))
+        .addStringOption(option => option
+            .setName('negative')
+            .setDescription('negative_prompt')),
     /**
      * 
      * @param {ChatInputCommandInteraction} interaction 
@@ -26,6 +34,8 @@ module.exports = {
         const prompt = interaction.options.getString('prompt');
         const batch_size = interaction.options.getInteger('batch') ?? 1; // default = 1
         const steps = interaction.options.getInteger('steps') ?? 10;
+        const denoising = interaction.options.getNumber('denoising') ?? 0.7;
+        const negative_prompt = interaction.options.getString('negative');
         await interaction.deferReply();
 
         const request = {
@@ -39,7 +49,8 @@ module.exports = {
                 prompt: prompt,
                 batch_size: batch_size,
                 steps: steps,
-                denoising_strength: 0.7,
+                denoising_strength: denoising,
+                negative_prompt: negative_prompt,
                 restore_faces: true,
                 hr_upscaler: "Nearest"
             })
@@ -49,7 +60,7 @@ module.exports = {
         const data = await response.json();
         console.log(data.parameters);
         const buff = new Buffer.from(data.images[0], 'base64');
-        await interaction.editReply({ files: [{ attachment: buff }] }); // 现在只会发一张图片
+        await interaction.editReply({ content: prompt, files: [{ attachment: buff }] }); // 现在只会发一张图片
 
     }
 }
