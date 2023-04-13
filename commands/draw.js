@@ -25,7 +25,18 @@ module.exports = {
             .setMaxValue(1))
         .addStringOption(option => option
             .setName('negative')
-            .setDescription('negative_prompt')),
+            .setDescription('negative_prompt'))
+        .addIntegerOption(option => option
+            .setName('width')
+            .setDescription('width'))
+            .setMinValue(1)
+            .setMaxValue(1024)
+        .addIntegerOption(option => option
+            .setName('height')
+            .setDescription('width')
+            .setMinValue(1)
+            .setMaxValue(1024)
+        ),
     /**
      * 
      * @param {ChatInputCommandInteraction} interaction 
@@ -36,6 +47,8 @@ module.exports = {
         const steps = interaction.options.getInteger('steps') ?? 10;
         const denoising = interaction.options.getNumber('denoising') ?? 0.7;
         const negative_prompt = interaction.options.getString('negative');
+        const width = interaction.options.getInteger('width') ?? 512;
+        const height = interaction.options.getInteger('heiight') ?? 768;
         await interaction.deferReply();
 
         const request = {
@@ -52,7 +65,10 @@ module.exports = {
                 denoising_strength: denoising,
                 negative_prompt: negative_prompt,
                 restore_faces: true,
-                hr_upscaler: "Nearest"
+                hr_upscaler: "Nearest",
+                sampler_name: "DPM++ 2M Karras",
+                width: width,
+                height: height
             })
         }
 
