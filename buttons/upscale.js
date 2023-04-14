@@ -1,7 +1,7 @@
 const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = require('discord.js');
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
-import fetch, { FormData, fileFromSync } from 'node-fetch';
+const axios = require('axios');
 
 
 module.exports = {
@@ -25,27 +25,26 @@ module.exports = {
 
         await interaction.deferUpdate();
 
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('sync', '1');
-        formData.append('image_base64', pic);
         formData.append('type', 'face');
-        formData.append('return_type', 2);
-        const request = {
-            method: 'POST',
-            headers: {
-              'X-API-KEY': 'wxnjcva3it2zn4l8l'
+        formData.append('return_type', '2');
+        formData.append('image_base64', pic);
+          
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://techsz.aoscdn.com/api/tasks/visual/scale',
+            headers: { 
+              'X-API-KEY': 'wxnjcva3it2zn4l8l', 
+              ...formData.getHeaders()
             },
-            body: formData
+            data : formData
           };
           
+          axios.request(config)
           
-          console.log(JSON.stringify(request));
-          
-          const response = await fetch('https://techsz.aoscdn.com/api/tasks/visual/scale', request);
-          
-
-
-        const data = await response.json();
+        const data = await response.data;
         console.log(data);
         const buff = [];
 
