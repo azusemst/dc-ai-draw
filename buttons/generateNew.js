@@ -23,7 +23,7 @@ module.exports = {
         const width = options.width ?? 512;
         const height = options.height ?? 768;
         
-        await deferReply();
+        await interaction.deferReply();
 
         const request = {
             method: "POST",
