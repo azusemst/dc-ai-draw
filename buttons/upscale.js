@@ -1,8 +1,6 @@
 const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = require('discord.js');
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
-const axios = require('axios');
-const https = require('https');
 
 module.exports = {
     data: {
@@ -40,8 +38,7 @@ module.exports = {
         }, async function (error, response) {
         if (error) throw new Error(error);
         const buff = [];
-
-        buff.push(new Buffer.from(data.image, 'base64'));
+        buff.push(new Buffer.from(response.body.image, 'base64'));
         await interaction.editReply({ content: "Upscale result", files: buff});   
         });
     }
