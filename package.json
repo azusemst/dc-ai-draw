@@ -1,7 +1,7 @@
 {
   "name": "ai-draw",
   "version": "1.0.0",
-  "description": "",
+  "description": "Main function -> [draw.js](commands/draw.js)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
