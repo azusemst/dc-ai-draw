@@ -19,6 +19,8 @@ module.exports = {
         const json = await keyv.get(old_uuid);
         console.log(json);
 
+        console.log("start generate");
+
         await interaction.deferReply();
 
 

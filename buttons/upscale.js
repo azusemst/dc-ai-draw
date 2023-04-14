@@ -14,13 +14,16 @@ module.exports = {
      * @param {ButtonInteraction} interaction 
      */
     async execute(interaction) {
-        await interaction.deferReply();
         buttonId = interaction.component.customId;
         const old_uuid = buttonId.split('-')[1];
         const idx_pic = buttonId.split('-')[2];
         const keyv = new Keyv('redis://localhost:6379');
         console.log(`image-${old_uuid}-${idx_pic}`);
         const pic = await keyv.get(`image-${old_uuid}-${idx_pic}`);
+
+        console.log("generate");
+
+        await interaction.deferReply();
 
         const request = {
             method: 'POST',
