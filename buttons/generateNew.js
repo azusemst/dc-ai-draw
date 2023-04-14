@@ -4,7 +4,7 @@ const Keyv = require('keyv');
 
 module.exports = {
     data: {
-        name: 'generate new'
+        name: 'generateNew'
     },
 
      /**
