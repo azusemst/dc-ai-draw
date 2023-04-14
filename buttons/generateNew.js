@@ -19,6 +19,9 @@ module.exports = {
         const json = await keyv.get(old_uuid);
         console.log(json);
 
+        await interaction.deferReply();
+
+
         const request = {
             method: "POST",
             headers: {
