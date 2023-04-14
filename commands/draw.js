@@ -77,21 +77,11 @@ module.exports = {
         const data = await response.json();
 
         const generateNewBtn = new ButtonBuilder()
-            .setCustomId('generate new')    
+            .setCustomId(`generateNew-${prompt}-${batch_size}-${steps}-${denoising}-${negative_prompt}-${width}-${height}`)    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
             .setEmoji('🔃');
-        
-
-        options = {
-                prompt: prompt,
-                batch_size: batch_size,
-                steps: steps,
-                denoising: denoising,
-                negative_prompt: negative_prompt,
-                width: width,
-                height: height
-        }    
+          
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn)
 
@@ -100,6 +90,6 @@ module.exports = {
         for (pic of data.images) {
             buff.push(new Buffer.from(pic, 'base64'));
         }
-        await interaction.editReply({ content: prompt, files: buff, components: [actionRow], embeds: options });   
+        await interaction.editReply({ content: prompt, files: buff, components: [actionRow]});   
     }
 }

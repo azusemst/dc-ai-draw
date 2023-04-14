@@ -21,8 +21,10 @@ module.exports = {
             }
         } else if (interaction.isButton()) {
             console.log(`button clicked: ${interaction.component.customId}`);
+            buttonId = interaction.component.customId;
+            buttonName = buttonId.split('-')[0]
 
-            const button = interaction.client.buttons.get(interaction.component.customId);
+            const button = interaction.client.buttons.get(buttonName);
             if (!button) {
                 console.error(`Error: No button matching "${interaction.component.customId}" was found.`);
                 return;
