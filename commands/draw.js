@@ -91,8 +91,8 @@ module.exports = {
             .setEmoji('🔃');
           
         const actionRow = new ActionRowBuilder()
-            .addComponents(generateNewBtn)
-
+            .addComponents(generateNewBtn);
+        console.log(`key:${uuid}`);
         console.log(data.parameters);
         const buff = [];
         for (pic of data.images) {
