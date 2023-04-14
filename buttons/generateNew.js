@@ -11,14 +11,18 @@ module.exports = {
      * @param {ButtonInteraction} interaction 
      */
      async execute(interaction) {
-        const prompt = interaction.options.getString('prompt');
-        const batch_size = interaction.options.getInteger('pics') ?? 2; // default = 2
-        const steps = interaction.options.getInteger('steps') ?? 10;
-        const denoising = interaction.options.getNumber('denoising') ?? 0.7;
-        const negative_prompt = interaction.options.getString('negative') ?? "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry";
-        const width = interaction.options.getInteger('width') ?? 512;
-        const height = interaction.options.getInteger('height') ?? 768;
-        await interaction.deferReply();
+        const optionsData = interaction.message.components[0].components[0].data;
+        const options = optionsData.options;
+        
+        const prompt = options.prompt;
+        const batch_size = options.batch_size ?? 2; // default = 2
+        const steps = options.steps ?? 10;
+        const denoising = options.denoising ?? 0.7;
+        const negative_prompt = options.negative_prompt ?? "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry";
+        const width = options.width ?? 512;
+        const height = options.height ?? 768;
+        
+        await deferReply();
 
         const request = {
             method: "POST",
