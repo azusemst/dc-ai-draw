@@ -36,6 +36,8 @@ module.exports = {
             })
         };
 
+        console.log(JSON.stringify(request));
+
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/extra-single-image', request);
         const data = await response.json();
         const buff = [];
