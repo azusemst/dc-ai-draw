@@ -35,7 +35,9 @@ module.exports = {
 
         const response = await fetch('https://techsz.aoscdn.com/api/tasks/visual/scale', request);
 
+
         const data = await response.json();
+        console.log(data);
         const buff = [];
 
         buff.push(new Buffer.from(data.image, 'base64'));
