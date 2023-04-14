@@ -1,7 +1,7 @@
 const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = require('discord.js');
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
-const FormData = require('form-data');
+import fetch, { FormData, fileFromSync } from 'node-fetch';
 
 
 module.exports = {
