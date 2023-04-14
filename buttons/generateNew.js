@@ -17,7 +17,17 @@ module.exports = {
         const keyv = new Keyv('redis://localhost:6379');
         json = keyv.get(old_uuid);
 
-        const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', JSON.parse(json));
+        const request = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "application/json",
+                "Authorization": process.env.AUTH
+            },
+            body: JSON.parse(json)
+        };
+
+        const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
         const data = await response.json();
         const uid = new ShortUniqueId();
         const uuid = uid();

@@ -80,7 +80,7 @@ module.exports = {
         };
         const uid = new ShortUniqueId();
         const uuid = uid();
-        keyv.set(uuid, JSON.stringify(request));
+        keyv.set(uuid, request.body);
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
         const data = await response.json();
 
