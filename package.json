@@ -10,8 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@keyv/redis": "^2.5.7",
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
-    "keyv": "^4.5.2"
+    "keyv": "^4.5.2",
+    "short-unique-id": "^4.4.4"
   }
 }

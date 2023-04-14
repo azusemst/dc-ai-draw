@@ -84,7 +84,7 @@ module.exports = {
         const uid = new ShortUniqueId();
 
         const generateNewBtn = new ButtonBuilder()
-            .setCustomId(`generateNew-${uid}`)    
+            .setCustomId(`generateNew-${uid()}`)    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
             .setEmoji('🔃');
