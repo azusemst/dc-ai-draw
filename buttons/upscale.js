@@ -36,8 +36,7 @@ module.exports = {
             maxBodyLength: Infinity,
             url: 'https://techsz.aoscdn.com/api/tasks/visual/scale',
             headers: { 
-              'X-API-KEY': 'wxnjcva3it2zn4l8l', 
-              ...formData.getHeaders()
+              'X-API-KEY': 'wxnjcva3it2zn4l8l'
             },
             data : formData
           };
