@@ -24,11 +24,11 @@ module.exports = {
         const request = {
             method: "POST",
             headers: {
-                'X-API-KEY': '{YOUR_API_KEY}'
+                'X-API-KEY': 'wxnjcva3it2zn4l8l'
             },
             body: new FormData({
                 sync: '1',
-                image_base64: fs.createReadStream('/path/to/image.jpg'),
+                image_base64: pic,
                 type: 'face'
               })
         };
