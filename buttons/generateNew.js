@@ -13,9 +13,9 @@ module.exports = {
      */
      async execute(interaction) {
         buttonId = interaction.component.customId;
-        uuid = buttonId.split('-')[1]
+        const old_uuid = buttonId.split('-')[1]
         const keyv = new Keyv('redis://localhost:6379');
-        json = keyv.get(uuid);
+        json = keyv.get(old_uuid);
 
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', JSON.parse(json));
         const data = await response.json();
