@@ -13,16 +13,17 @@ module.exports = {
      */
      async execute(interaction) {
         buttonId = interaction.component.customId;
-        uid = buttonId.split('-')[1]
+        uuid = buttonId.split('-')[1]
         const keyv = new Keyv('redis://localhost:6379');
-        json = keyv.get(uid);
+        json = keyv.get(uuid);
 
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', JSON.parse(json));
         const data = await response.json();
         const uid = new ShortUniqueId();
+        const uuid = uid();
 
         const generateNewBtn = new ButtonBuilder()
-            .setCustomId(`generateNew-${uid()}`)    
+            .setCustomId(`generateNew-${uuid}`)    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
             .setEmoji('🔃');
@@ -36,6 +37,6 @@ module.exports = {
             buff.push(new Buffer.from(pic, 'base64'));
         }
         await interaction.editReply({ content: prompt, files: buff, components: [actionRow] });   
-        keyv.set(uid, JSON.stringify(request))
+        keyv.set(uuid, JSON.stringify(request))
     }
 }
