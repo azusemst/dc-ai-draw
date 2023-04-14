@@ -12,7 +12,8 @@ module.exports = {
      */
      async execute(interaction) {
         const optionsData = interaction.message.components[0].components[0].data;
-        const options = optionsData.options;
+        const options = optionsData;
+        console.log(options)
         
         const prompt = options.prompt;
         const batch_size = options.batch_size ?? 2; // default = 2
