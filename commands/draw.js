@@ -95,8 +95,16 @@ module.exports = {
         console.log(`key:${uuid}`);
         console.log(data.parameters);
         const buff = [];
-        for (pic of data.images) {
-            buff.push(new Buffer.from(pic, 'base64'));
+        for (let i = 0; i < data.images.length; i++) {
+            const pic = data.images[i];
+            keyv.set(`image-${uuid}-${i}`, pic);
+            newBtn = new ButtonBuilder()
+            .setCustomId(`upscale-${uuid}-${i}`)    
+            .setLabel(`Upscale ${i}`)
+            .setStyle(ButtonStyle.Primary)
+            .setEmoji('⬆️');
+            buff.push(Buffer.from(pic, 'base64'));
+            actionRow.addComponents(newBtn);
         }
         await interaction.editReply({ content: prompt, files: buff, components: [actionRow]});   
     }
