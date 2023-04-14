@@ -41,7 +41,7 @@ module.exports = {
             data : formData
           };
           
-        const { data } = axios.request(config);
+        const { data } = axios.post(config);
         console.log(data);
         const buff = [];
 
