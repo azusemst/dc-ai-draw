@@ -1,5 +1,5 @@
 const { ButtonBuilder } = require('@discordjs/builders')
-const {ButtonInteraction} = require('discord.js')
+const {ButtonInteraction, ButtonStyle} = require('discord.js')
 
 module.exports = {
     data: new ButtonBuilder()
