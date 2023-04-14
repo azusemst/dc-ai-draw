@@ -33,13 +33,14 @@ module.exports = {
         formData: {
           'sync': '1',
           'image_base64': pic,
-          'type': 'face'
+          'type': 'face',
+          'return_type': 2
         }
         }, async function (error, response) {
         if (error) throw new Error(error);
         console.log(response.body);
         const buff = [];
-        buff.push(new Buffer.from(response.body.image, 'base64'));
+        buff.push(new Buffer.from(response.body.data.image, 'base64'));
         await interaction.editReply({ content: "Upscale result", files: buff});   
         });
     }
