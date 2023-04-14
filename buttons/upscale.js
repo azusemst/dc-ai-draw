@@ -31,7 +31,8 @@ module.exports = {
             body: new FormData({
                 sync: "1",
                 image_base64: pic,
-                type: "face"
+                type: "face",
+                return_type: 2
               })
         };
 
