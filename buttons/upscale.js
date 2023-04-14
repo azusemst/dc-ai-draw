@@ -32,7 +32,8 @@ module.exports = {
                 resize_mode: 0,
                 show_extras_results: true,
                 upscaling_resize: 2,
-                upscaler_1: "R-ESRGAN 4x+"
+                upscaler_1: "R-ESRGAN 4x+",
+                image: pic
             })
         };
 
