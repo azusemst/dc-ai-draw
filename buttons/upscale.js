@@ -39,9 +39,10 @@ module.exports = {
         }, async function (error, response) {
         if (error) throw new Error(error);
         console.log(response.body);
+        const responseBody = JSON.parse(response.body);
+        console.log(responseBody);
         const buff = [];
-        buff.push(new Buffer.from(response.body.data.image, 'base64'));
-        await interaction.editReply({ content: "Upscale result", files: buff});   
-        });
+        buff.push(new Buffer.from(responseBody.data.image, 'base64'));
+        await interaction.editReply({ content: "Upscale result", files: buff});  
     }
 }
