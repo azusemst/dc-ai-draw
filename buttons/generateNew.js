@@ -1,46 +1,18 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatInputCommandInteraction } = require('discord.js');
+const { ButtonBuilder } = require('@discordjs/builders')
+const {ButtonInteraction} = require('discord.js')
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('draw')
-        .setDescription('生成图片')
-        .addStringOption(option => option
-            .setName('prompt')
-            .setDescription('prompt')
-            .setRequired(true))
-        .addIntegerOption(option => option
-            .setName('pics')
-            .setDescription('batch_size')
-            .setMinValue(1)
-            .setMaxValue(9))
-        .addIntegerOption(option => option
-            .setName('steps')
-            .setDescription('steps')
-            .setMinValue(1)
-            .setMaxValue(50))
-        .addNumberOption(option => option
-            .setName('denoising')
-            .setDescription('denoising_strength')
-            .setMinValue(0)
-            .setMaxValue(1))
-        .addStringOption(option => option
-            .setName('negative')
-            .setDescription('negative_prompt'))
-        .addIntegerOption(option => option
-            .setName('width')
-            .setDescription('width')
-            .setMinValue(1)
-            .setMaxValue(1024))
-        .addIntegerOption(option => option
-            .setName('height')
-            .setDescription('height')
-            .setMinValue(1)
-            .setMaxValue(1024)),
-    /**
+    data: new ButtonBuilder()
+    .setCustomId('generate new')    
+    .setLabel('Generate New')
+    .setStyle(ButtonStyle.Primary)
+    .setEmoji('🔃'),
+
+     /**
      * 
      * @param {ChatInputCommandInteraction} interaction 
      */
-    async execute(interaction) {
+     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
         const batch_size = interaction.options.getInteger('pics') ?? 2; // default = 2
         const steps = interaction.options.getInteger('steps') ?? 10;
