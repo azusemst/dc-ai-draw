@@ -40,9 +40,7 @@ module.exports = {
         const data = await response.json();
         const buff = [];
 
-        for (pic of data.images) {
-            buff.push(new Buffer.from(pic, 'base64'));
-        }
+        buff.push(new Buffer.from(data.image, 'base64'));
         await interaction.editReply({ content: "Upscale result", files: buff});   
     }
 }
