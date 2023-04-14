@@ -37,6 +37,6 @@ module.exports = {
             buff.push(new Buffer.from(pic, 'base64'));
         }
         await interaction.editReply({ content: prompt, files: buff, components: [actionRow] });   
-        keyv.set(uuid, JSON.stringify(request))
+        keyv.set(uuid, json);
     }
 }

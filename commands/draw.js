@@ -77,8 +77,8 @@ module.exports = {
                 width: width,
                 height: height
             })
-        }
-
+        };
+        keyv.set(uuid, JSON.stringify(request));
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
         const data = await response.json();
         const uid = new ShortUniqueId();
@@ -99,6 +99,5 @@ module.exports = {
             buff.push(new Buffer.from(pic, 'base64'));
         }
         await interaction.editReply({ content: prompt, files: buff, components: [actionRow]});   
-        keyv.set(uuid, JSON.stringify(request))
     }
 }
