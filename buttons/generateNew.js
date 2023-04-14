@@ -16,7 +16,7 @@ module.exports = {
         const old_uuid = buttonId.split('-')[1]
         const keyv = new Keyv('redis://localhost:6379');
         console.log(`key:${old_uuid}`);
-        json = keyv.get(old_uuid);
+        const json = await keyv.get(old_uuid);
         console.log(json);
 
         const request = {
