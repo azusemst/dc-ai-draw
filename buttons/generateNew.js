@@ -51,7 +51,7 @@ module.exports = {
         for (pic of data.images) {
             buff.push(new Buffer.from(pic, 'base64'));
         }
-        await interaction.editReply({ content: json, files: buff, components: [actionRow] });   
+        await interaction.editReply({ content: "generated new:", files: buff, components: [actionRow] });   
         keyv.set(uuid, json);
     }
 }

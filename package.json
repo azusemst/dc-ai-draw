@@ -13,6 +13,7 @@
     "@keyv/redis": "^2.5.7",
     "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
+    "form-data": "^4.0.0",
     "keyv": "^4.5.2",
     "short-unique-id": "^4.4.4"
   }
