@@ -48,6 +48,7 @@ module.exports = {
         const negative_prompt = interaction.options.getString('negative') ?? "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry";
         const width = interaction.options.getInteger('width') ?? 512;
         const height = interaction.options.getInteger('height') ?? 768;
+        
         await interaction.deferReply();
 
 
