@@ -44,5 +44,6 @@ module.exports = {
         const buff = [];
         buff.push(new Buffer.from(responseBody.data.image, 'base64'));
         await interaction.editReply({ content: "Upscale result", files: buff});  
-    }
+        });
+    },
 }
