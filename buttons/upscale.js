@@ -36,6 +36,8 @@ module.exports = {
               })
         };
 
+        console.log(JSON.stringify(request));
+
         const response = await fetch('https://techsz.aoscdn.com/api/tasks/visual/scale', request);
 
 
