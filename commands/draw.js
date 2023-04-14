@@ -80,19 +80,18 @@ module.exports = {
             .setCustomId('generate new')    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
-            .setEmoji('🔃')
-            .setData({
-                options: {
-                    prompt: prompt,
-                    batch_size: batch_size,
-                    steps: steps,
-                    denoising: denoising,
-                    negative_prompt: negative_prompt,
-                    width: width,
-                    height: height
-                }
-            });
+            .setEmoji('🔃');
         
+
+        options = {
+                prompt: prompt,
+                batch_size: batch_size,
+                steps: steps,
+                denoising: denoising,
+                negative_prompt: negative_prompt,
+                width: width,
+                height: height
+        }    
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn)
 
@@ -101,6 +100,6 @@ module.exports = {
         for (pic of data.images) {
             buff.push(new Buffer.from(pic, 'base64'));
         }
-        await interaction.editReply({ content: prompt, files: buff, components: [actionRow] });   
+        await interaction.editReply({ content: prompt, files: buff, components: [actionRow], embeds: options });   
     }
 }
