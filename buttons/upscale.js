@@ -25,32 +25,24 @@ module.exports = {
 
         await interaction.deferUpdate();
 
-        let formData = new FormData();
-        formData.append('sync', '1');
-        formData.append('type', 'face');
-        formData.append('return_type', '2');
-        formData.append('image_base64', pic);
-          
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://techsz.aoscdn.com/api/tasks/visual/scale',
-            headers: { 
-              'X-API-KEY': 'wxnjcva3it2zn4l8l'
-            },
-            data : formData
-          };
-
-          const agent = new https.Agent({
-            rejectUnauthorized: false
-          });
-          
-          
-        const { data } = axios.post(config, { httpsAgent: agent });
-        console.log(data);
+        var request = require('request');
+        request({
+        'method': 'POST',
+        'url': 'https://techsz.aoscdn.com/api/tasks/visual/scale',
+        'headers': {
+          'X-API-KEY': '{YOUR_API_KEY}'
+        },
+        formData: {
+          'sync': '1',
+          'image_base64': pic,
+          'type': 'face'
+        }
+        }, async function (error, response) {
+        if (error) throw new Error(error);
         const buff = [];
 
         buff.push(new Buffer.from(data.image, 'base64'));
         await interaction.editReply({ content: "Upscale result", files: buff});   
+        });
     }
 }
