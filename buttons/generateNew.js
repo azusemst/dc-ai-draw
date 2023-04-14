@@ -6,7 +6,7 @@ module.exports = {
     .setCustomId('generate new')    
     .setLabel('Generate New')
     .setStyle(ButtonStyle.Primary)
-    .setEmoji('🔃'),
+    .setEmoji('ARROW_CLOCKWISE'),
 
      /**
      * 
