@@ -34,7 +34,8 @@ module.exports = {
           'sync': '1',
           'image_base64': pic,
           'type': 'face',
-          'return_type': 2
+          'return_type': 2,
+          'scale_factor': 4
         }
         }, async function (error, response) {
         if (error) throw new Error(error);
