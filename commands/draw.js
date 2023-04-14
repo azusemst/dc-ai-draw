@@ -54,6 +54,8 @@ module.exports = {
         const width = interaction.options.getInteger('width') ?? 512;
         const height = interaction.options.getInteger('height') ?? 768;
 
+        console.log("start");
+
         await interaction.deferReply();
 
 
