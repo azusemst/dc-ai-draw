@@ -21,23 +21,18 @@ module.exports = {
 
         await interaction.deferReply();
 
-        
-        var request = require('request');
-        request({
-        'method': 'POST',
-        'url': 'https://techsz.aoscdn.com/api/tasks/visual/scale',
-        'headers': {
-          'X-API-KEY': '{YOUR_API_KEY}'
-        },
-        formData: {
-          'sync': '1',
-          'image_file': pic,
-          'type': 'face'
-        }
-        }, function (error, response) {
-        if (error) throw new Error(error);
-        console.log(response.body);
-        });
+        const request = {
+            method: "POST",
+            headers: {
+                'X-API-KEY': '{YOUR_API_KEY}'
+            },
+            body: new FormData({
+                sync: '1',
+                image_base64: fs.createReadStream('/path/to/image.jpg'),
+                type: 'face'
+              })
+        };
+
         const data = await response.json();
         const buff = [];
 
