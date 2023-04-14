@@ -1,12 +1,12 @@
-const { ButtonBuilder } = require('@discordjs/builders')
-const {ButtonInteraction, ButtonStyle} = require('discord.js')
+
+const {ButtonBuilder, ButtonInteraction, ButtonStyle} = require('discord.js')
 
 module.exports = {
     data: new ButtonBuilder()
     .setCustomId('generate new')    
     .setLabel('Generate New')
     .setStyle(ButtonStyle.Primary)
-    .setEmoji('\u27F3'),
+    .setEmoji('ARROW_CLOCKWISE'),
 
      /**
      * 
