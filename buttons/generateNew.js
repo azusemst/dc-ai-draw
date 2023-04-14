@@ -24,7 +24,7 @@ module.exports = {
                 "accept": "application/json",
                 "Authorization": process.env.AUTH
             },
-            body: JSON.parse(json)
+            body: json
         };
 
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
