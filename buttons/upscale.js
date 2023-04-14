@@ -2,6 +2,11 @@ const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = requir
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const axios = require('axios');
+const https = require('https');
+
+const agent = new https.Agent({
+  rejectUnauthorized: false
+});
 
 
 module.exports = {
@@ -41,7 +46,7 @@ module.exports = {
             data : formData
           };
           
-        const { data } = axios.post(config);
+        const { data } = axios.post(config, { httpsAgent: agent });
         console.log(data);
         const buff = [];
 
