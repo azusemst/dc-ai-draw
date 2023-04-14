@@ -51,7 +51,7 @@ module.exports = {
 
 
         const generateNewBtn = new ButtonBuilder()
-            .setCustomId(`generateNew-${prompt}-${batch_size}-${steps}-${denoising}-${negative_prompt}-${width}-${height}`)    
+            .setCustomId(`generateNew`)    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
             .setEmoji('🔃')
