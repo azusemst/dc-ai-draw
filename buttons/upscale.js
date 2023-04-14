@@ -22,25 +22,22 @@ module.exports = {
         await interaction.deferReply();
 
         
-        const request = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "accept": "application/json",
-                "Authorization": process.env.AUTH
-            },
-            body: JSON.stringify({ // 其它参数暂时没加
-                resize_mode: 0,
-                show_extras_results: true,
-                upscaling_resize: 2,
-                upscaler_1: "R-ESRGAN 4x+",
-                image: pic
-            })
-        };
-
-        console.log(JSON.stringify(request));
-
-        const response = await fetch('http://121.41.44.246:8080/sdapi/v1/extra-single-image', request);
+        var request = require('request');
+        request({
+        'method': 'POST',
+        'url': 'https://techsz.aoscdn.com/api/tasks/visual/scale',
+        'headers': {
+          'X-API-KEY': '{YOUR_API_KEY}'
+        },
+        formData: {
+          'sync': '1',
+          'image_file': pic,
+          'type': 'face'
+        }
+        }, function (error, response) {
+        if (error) throw new Error(error);
+        console.log(response.body);
+        });
         const data = await response.json();
         const buff = [];
 
