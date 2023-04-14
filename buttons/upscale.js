@@ -23,20 +23,21 @@ module.exports = {
 
         console.log("generate");
 
-        await interaction.deferReply();
+        await interaction.deferUpdate();
 
+        const formData = new FormData();
+        formData.append('sync', '1');
+        formData.append('image_base64', pic);
+        formData.append('type', 'face');
+        formData.append('return_type', 2);
         const request = {
             method: 'POST',
             headers: {
               'X-API-KEY': 'wxnjcva3it2zn4l8l'
             },
-            body: new FormData()
+            body: formData
           };
           
-          request.body.append('sync', '1');
-          request.body.append('image_base64', pic);
-          request.body.append('type', 'face');
-          request.body.append('return_type', 2);
           
           console.log(JSON.stringify(request));
           

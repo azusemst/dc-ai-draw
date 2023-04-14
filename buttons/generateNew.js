@@ -21,7 +21,7 @@ module.exports = {
 
         console.log("start generate");
 
-        await interaction.deferReply();
+        await interaction.deferUpdate();
 
 
         const request = {
