@@ -4,11 +4,6 @@ const Keyv = require('keyv');
 const axios = require('axios');
 const https = require('https');
 
-const agent = new https.Agent({
-  rejectUnauthorized: false
-});
-
-
 module.exports = {
     data: {
         name: 'upscale'
@@ -45,6 +40,11 @@ module.exports = {
             },
             data : formData
           };
+
+          const agent = new https.Agent({
+            rejectUnauthorized: false
+          });
+          
           
         const { data } = axios.post(config, { httpsAgent: agent });
         console.log(data);
