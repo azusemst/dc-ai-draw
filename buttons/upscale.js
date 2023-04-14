@@ -28,7 +28,7 @@ module.exports = {
         'method': 'POST',
         'url': 'https://techsz.aoscdn.com/api/tasks/visual/scale',
         'headers': {
-          'X-API-KEY': '{YOUR_API_KEY}'
+          'X-API-KEY': 'wxnjcva3it2zn4l8l'
         },
         formData: {
           'sync': '1',
