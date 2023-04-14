@@ -22,23 +22,23 @@ module.exports = {
         console.log(`image-${old_uuid}-${idx_pic}`);
         const pic = await keyv.get(`image-${old_uuid}-${idx_pic}`);
 
-
         const request = {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "X-API-KEY": "wxnjcva3it2zn4l8l"
+              'X-API-KEY': 'wxnjcva3it2zn4l8l'
             },
-            body: new FormData({
-                sync: "1",
-                image_base64: pic,
-                type: "face",
-                return_type: 2
-              })
-        };
-
-        console.log(JSON.stringify(request));
-
-        const response = await fetch('https://techsz.aoscdn.com/api/tasks/visual/scale', request);
+            body: new FormData()
+          };
+          
+          request.body.append('sync', '1');
+          request.body.append('image_base64', pic);
+          request.body.append('type', 'face');
+          request.body.append('return_type', 2);
+          
+          console.log(JSON.stringify(request));
+          
+          const response = await fetch('https://techsz.aoscdn.com/api/tasks/visual/scale', request);
+          
 
 
         const data = await response.json();
