@@ -1,4 +1,7 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatInputCommandInteraction } = require('discord.js');
+const ShortUniqueId = require('short-unique-id');
+const Keyv = require('keyv');
+
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -41,6 +44,8 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction 
      */
     async execute(interaction) {
+        const keyv = new Keyv('redis://localhost:6379');
+
         const prompt = interaction.options.getString('prompt');
         const batch_size = interaction.options.getInteger('pics') ?? 4; // default = 2
         const steps = interaction.options.getInteger('steps') ?? 20;
@@ -48,7 +53,7 @@ module.exports = {
         const negative_prompt = interaction.options.getString('negative') ?? "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry";
         const width = interaction.options.getInteger('width') ?? 512;
         const height = interaction.options.getInteger('height') ?? 768;
-        
+
         await interaction.deferReply();
 
 
@@ -76,9 +81,10 @@ module.exports = {
 
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
         const data = await response.json();
+        const uid = new ShortUniqueId();
 
         const generateNewBtn = new ButtonBuilder()
-            .setCustomId(`generateNew-${prompt}-${batch_size}-${steps}-${denoising}-${negative_prompt}-${width}-${height}`)    
+            .setCustomId(`generateNew-${uid}`)    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
             .setEmoji('🔃');
@@ -92,5 +98,6 @@ module.exports = {
             buff.push(new Buffer.from(pic, 'base64'));
         }
         await interaction.editReply({ content: prompt, files: buff, components: [actionRow]});   
+        keyv.set(uid, JSON.stringify(request))
     }
 }

@@ -1,5 +1,7 @@
 
-const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = require('discord.js')
+const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = require('discord.js');
+const ShortUniqueId = require('short-unique-id');
+const Keyv = require('keyv');
 
 module.exports = {
     data: {
@@ -11,42 +13,12 @@ module.exports = {
      * @param {ButtonInteraction} interaction 
      */
      async execute(interaction) {
-        const optionsData = interaction.message.components[0].components[0].data;
-        const options = optionsData;
-        console.log(options)
-        
-        const prompt = options.prompt;
-        const batch_size = options.batch_size ?? 2; // default = 2
-        const steps = options.steps ?? 10;
-        const denoising = options.denoising ?? 0.7;
-        const negative_prompt = options.negative_prompt ?? "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry";
-        const width = options.width ?? 512;
-        const height = options.height ?? 768;
-        
-        await interaction.deferReply();
+        buttonId = interaction.component.customId;
+        uid = buttonId.split('-')[1]
+        const keyv = new Keyv('redis://localhost:6379');
+        json = keyv.get(uid);
 
-        const request = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "accept": "application/json",
-                "Authorization": process.env.AUTH
-            },
-            body: JSON.stringify({ // 其它参数暂时没加
-                prompt: prompt,
-                batch_size: batch_size,
-                steps: steps,
-                denoising_strength: denoising,
-                negative_prompt: negative_prompt,
-                restore_faces: true,
-                hr_upscaler: "Nearest",
-                sampler_name: "DPM++ 2M Karras",
-                width: width,
-                height: height
-            })
-        }
-
-        const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
+        const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', JSON.parse(json));
         const data = await response.json();
 
 
@@ -54,18 +26,7 @@ module.exports = {
             .setCustomId(`generateNew`)    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
-            .setEmoji('🔃')
-            .setData({
-                options: {
-                    prompt: prompt,
-                    batch_size: batch_size,
-                    steps: steps,
-                    denoising: denoising,
-                    negative_prompt: negative_prompt,
-                    width: width,
-                    height: height
-                }
-            });
+            .setEmoji('🔃');
         
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn)
