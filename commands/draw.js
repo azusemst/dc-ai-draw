@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChatInputCommandInteraction } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatInputCommandInteraction } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -73,12 +73,22 @@ module.exports = {
 
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
         const data = await response.json();
+
+        const generateNewBtn = new ButtonBuilder()
+            .setCustomId('generate new')    
+            .setLabel('Generate New')
+            .setStyle(ButtonStyle.Primary)
+            .setEmoji('🔃');
+        
+        const actionRow = new ActionRowBuilder()
+            .addComponents(generateNewBtn)
+
         console.log(data.parameters);
         const buff = [];
         for (pic of data.images) {
             buff.push(new Buffer.from(pic, 'base64'));
         }
-        await interaction.editReply({ content: prompt, files: buff });
+        await interaction.editReply({ content: prompt, files: buff, components: [actionRow] });
 
     }
 }
