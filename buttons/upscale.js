@@ -1,6 +1,8 @@
 const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = require('discord.js');
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
+const FormData = require('form-data');
+
 
 module.exports = {
     data: {
@@ -12,6 +14,7 @@ module.exports = {
      * @param {ButtonInteraction} interaction 
      */
     async execute(interaction) {
+        await interaction.deferReply();
         buttonId = interaction.component.customId;
         const old_uuid = buttonId.split('-')[1];
         const idx_pic = buttonId.split('-')[2];
@@ -19,17 +22,16 @@ module.exports = {
         console.log(`image-${old_uuid}-${idx_pic}`);
         const pic = await keyv.get(`image-${old_uuid}-${idx_pic}`);
 
-        await interaction.deferReply();
 
         const request = {
             method: "POST",
             headers: {
-                'X-API-KEY': 'wxnjcva3it2zn4l8l'
+                "X-API-KEY": "wxnjcva3it2zn4l8l"
             },
             body: new FormData({
-                sync: '1',
+                sync: "1",
                 image_base64: pic,
-                type: 'face'
+                type: "face"
               })
         };
 
