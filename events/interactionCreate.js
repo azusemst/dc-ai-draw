@@ -23,6 +23,7 @@ module.exports = {
             console.log(`button clicked: ${interaction.component.customId}`);
             buttonId = interaction.component.customId;
             buttonName = buttonId.split('-')
+            console.log(buttonName)
 
 
             const button = interaction.client.buttons.get(buttonName[0]);
