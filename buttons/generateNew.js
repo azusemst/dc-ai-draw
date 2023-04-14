@@ -1,5 +1,5 @@
 
-const {ButtonBuilder, ButtonInteraction, ButtonStyle} = require('discord.js')
+const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = require('discord.js')
 
 module.exports = {
     data: new ButtonBuilder()
@@ -10,7 +10,7 @@ module.exports = {
 
      /**
      * 
-     * @param {ChatInputCommandInteraction} interaction 
+     * @param {ButtonInteraction} interaction 
      */
      async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
