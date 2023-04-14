@@ -2,11 +2,9 @@
 const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = require('discord.js')
 
 module.exports = {
-    data: new ButtonBuilder()
-    .setCustomId('generate new')    
-    .setLabel('Generate New')
-    .setStyle(ButtonStyle.Primary)
-    .setEmoji('ARROW_CLOCKWISE'),
+    data: {
+        name: 'generate new'
+    },
 
      /**
      * 
