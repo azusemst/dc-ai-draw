@@ -49,11 +49,23 @@ module.exports = {
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
         const data = await response.json();
 
+
         const generateNewBtn = new ButtonBuilder()
             .setCustomId('generate new')    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
-            .setEmoji('🔃');
+            .setEmoji('🔃')
+            .setData({
+                options: {
+                    prompt: prompt,
+                    batch_size: batch_size,
+                    steps: steps,
+                    denoising: denoising,
+                    negative_prompt: negative_prompt,
+                    width: width,
+                    height: height
+                }
+            });
         
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn)

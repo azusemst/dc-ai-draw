@@ -42,13 +42,15 @@ module.exports = {
      */
     async execute(interaction) {
         const prompt = interaction.options.getString('prompt');
-        const batch_size = interaction.options.getInteger('pics') ?? 2; // default = 2
-        const steps = interaction.options.getInteger('steps') ?? 10;
+        const batch_size = interaction.options.getInteger('pics') ?? 4; // default = 2
+        const steps = interaction.options.getInteger('steps') ?? 20;
         const denoising = interaction.options.getNumber('denoising') ?? 0.7;
         const negative_prompt = interaction.options.getString('negative') ?? "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry";
         const width = interaction.options.getInteger('width') ?? 512;
         const height = interaction.options.getInteger('height') ?? 768;
         await interaction.deferReply();
+
+
 
         const request = {
             method: "POST",
@@ -78,7 +80,18 @@ module.exports = {
             .setCustomId('generate new')    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
-            .setEmoji('🔃');
+            .setEmoji('🔃')
+            .setData({
+                options: {
+                    prompt: prompt,
+                    batch_size: batch_size,
+                    steps: steps,
+                    denoising: denoising,
+                    negative_prompt: negative_prompt,
+                    width: width,
+                    height: height
+                }
+            });
         
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn)
