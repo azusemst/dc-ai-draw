@@ -37,6 +37,7 @@ module.exports = {
         }
         }, async function (error, response) {
         if (error) throw new Error(error);
+        console.log(response.body);
         const buff = [];
         buff.push(new Buffer.from(response.body.image, 'base64'));
         await interaction.editReply({ content: "Upscale result", files: buff});   
