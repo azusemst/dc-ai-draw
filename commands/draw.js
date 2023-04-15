@@ -11,7 +11,7 @@ async function translate_to_english(text) {
       const response = await fetch('https://api.deepl.com/v2/translate', {
         method: 'POST',
         headers: {
-            'Authorization': 'DeepL-Auth-Key [yourAuthKey]',
+            'Authorization': 'DeepL-Auth-Key d4462d35-a54d-0caa-ff7d-097b3812fc92:fx',
             'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: `text=${text}&target_lang=EN-GB`
