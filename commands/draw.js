@@ -8,7 +8,7 @@ async function translate_to_english(text) {
   for (let char of text) {
     if ('\u4e00' <= char && char <= '\u9fff') {
       const api_key = 'd4462d35-a54d-0caa-ff7d-097b3812fc92:fx';
-      const response = awaitfetch('https://api.deepl.com/v2/translate', {
+      const response = await fetch('https://api.deepl.com/v2/translate', {
         method: 'POST',
         headers: {
             'Authorization': 'DeepL-Auth-Key [yourAuthKey]',
