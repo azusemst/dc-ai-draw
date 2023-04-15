@@ -1,6 +1,23 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatInputCommandInteraction } = require('discord.js');
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
+const deepl = require('deepl'); // 导入deepl模块
+
+// 将translate_to_english函数定义在execute函数之前
+async function translate_to_english(text) {
+    // 判断字符串是否包含中文字符
+    for (let char of text) {
+      if ('\u4e00' <= char && char <= '\u9fff') {
+        // 包含中文，调用Deepl翻译API进行翻译
+        const api_key = 'd4462d35-a54d-0caa-ff7d-097b3812fc92:fx'  // 请替换成你的Deepl API密钥
+        const translator = new deepl.Translator(api_key)
+        return translator.translateText(text, 'EN-GB')
+      }
+    }
+  
+    // 不包含中文，直接返回原字符串
+    return text
+  }
 
 
 module.exports = {
@@ -46,7 +63,7 @@ module.exports = {
     async execute(interaction) {
         const keyv = new Keyv('redis://localhost:6379');
 
-        const prompt = interaction.options.getString('prompt');
+        const prompt = await translate_to_english(interaction.options.getString('prompt'));
         const batch_size = interaction.options.getInteger('pics') ?? 4; // default = 2
         const steps = interaction.options.getInteger('steps') ?? 20;
         const denoising = interaction.options.getNumber('denoising') ?? 0.7;
