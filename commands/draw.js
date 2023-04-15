@@ -4,20 +4,23 @@ const Keyv = require('keyv');
 const deepl = require('deepl'); // 导入deepl模块
 
 async function translate_to_english(text) {
-    // 判断字符串是否包含中文字符
-    for (let char of text) {
-      if ('\u4e00' <= char && char <= '\u9fff') {
-        const api_key = 'd4462d35-a54d-0caa-ff7d-097b3812fc92:fx';
-        const result = await deepl.translate({
-          text: text,
-          targetLang: 'EN-GB',
-          authKey: api_key,
-        });
-        return result.data.translations[0].text; // 返回翻译后的英文字符串
-      }
+  // 判断字符串是否包含中文字符
+  for (let char of text) {
+    if ('\u4e00' <= char && char <= '\u9fff') {
+      const api_key = 'd4462d35-a54d-0caa-ff7d-097b3812fc92:fx';
+      const response = awaitfetch('https://api.deepl.com/v2/translate', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'DeepL-Auth-Key [yourAuthKey]',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `text=${text}&target_lang=EN-GB`
+    });
+      return response.json().translations[0].text; // 返回翻译后的英文字符串
     }
-    return text; // 不包含中文，直接返回原字符串
   }
+  return text; // 不包含中文，直接返回原字符串
+} 
 
 
 module.exports = {
