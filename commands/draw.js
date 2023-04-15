@@ -3,20 +3,20 @@ const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const deepl = require('deepl'); // 导入deepl模块
 
-// 将translate_to_english函数定义在execute函数之前
 async function translate_to_english(text) {
     // 判断字符串是否包含中文字符
     for (let char of text) {
       if ('\u4e00' <= char && char <= '\u9fff') {
-        // 包含中文，调用Deepl翻译API进行翻译
-        const api_key = 'd4462d35-a54d-0caa-ff7d-097b3812fc92:fx'  // 请替换成你的Deepl API密钥
-        const translator = new deepl.Translator(api_key)
-        return translator.translateText(text, 'EN-GB')
+        const api_key = 'd4462d35-a54d-0caa-ff7d-097b3812fc92:fx';
+        const result = await deepl.translate({
+          text: text,
+          targetLang: 'EN-GB',
+          authKey: api_key,
+        });
+        return result.data.translations[0].text; // 返回翻译后的英文字符串
       }
     }
-  
-    // 不包含中文，直接返回原字符串
-    return text
+    return text; // 不包含中文，直接返回原字符串
   }
 
 
