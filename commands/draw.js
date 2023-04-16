@@ -131,6 +131,6 @@ module.exports = {
             buff.push(Buffer.from(pic, 'base64'));
             actionRow.addComponents(newBtn);
         }
-        await interaction.editReply({ content: prompt, files: buff, components: [actionRow]});   
+        await interaction.editReply({ content: `${interaction.user.username}'s drawing:`, files: buff, components: [actionRow]});   
     }
 }
