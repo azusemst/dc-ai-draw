@@ -56,6 +56,10 @@ module.exports = {
               }
             }
           );
+
+          console.log(output); // <-- 在这里打印输出
+          console.log(typeof output); // <-- 在这里打印输出类型
+
           const attachment = new MessageAttachment(Buffer.from(output), 'upscaled.png');
           await interaction.editReply({ content: "Upscale result", files: [attachment] });
         });
