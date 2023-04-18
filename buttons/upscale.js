@@ -57,6 +57,8 @@ module.exports = {
             }
           );
 
+          logger.info(JSON.stringify(output));
+
           await interaction.editReply({ content: "Upscale result", files: output});  
         });
     },
