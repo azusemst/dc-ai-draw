@@ -18,7 +18,7 @@ async function translate_to_english(text) {
     });
 
     const translate = await resp.json();
-    console.log(translate);
+    logger.info(translate);
     return translate.translations[0].text; // 返回翻译后的英文字符串
     }
   }
@@ -77,7 +77,7 @@ module.exports = {
         const width = interaction.options.getInteger('width') ?? 512;
         const height = interaction.options.getInteger('height') ?? 768;
 
-        console.log("start");
+        logger.info("start");
 
         await interaction.deferReply();
 
@@ -117,8 +117,8 @@ module.exports = {
           
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn);
-        console.log(`key:${uuid}`);
-        console.log(data.parameters);
+        logger.info(`key:${uuid}`);
+        logger.info(data.parameters);
         const buff = [];
         for (let i = 0; i < data.images.length; i++) {
             const pic = data.images[i];

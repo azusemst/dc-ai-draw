@@ -15,11 +15,11 @@ module.exports = {
         buttonId = interaction.component.customId;
         const old_uuid = buttonId.split('-')[1]
         const keyv = new Keyv('redis://localhost:6379');
-        console.log(`key:${old_uuid}`);
+        logger.info(`key:${old_uuid}`);
         const json = await keyv.get(old_uuid);
-        console.log(json);
+        logger.info(json);
 
-        console.log("start generate");
+        logger.info("start generate");
 
         await interaction.deferUpdate();
 
@@ -48,7 +48,7 @@ module.exports = {
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn)
 
-        console.log(data.parameters);
+        logger.info(data.parameters);
         const buff = [];
         for (let i = 0; i < data.images.length; i++) {
             const pic = data.images[i];
