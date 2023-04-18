@@ -3,6 +3,8 @@ const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const Replicate = require('replicate');
 const logger = require('../logger');
+const { MessageAttachment } = require('discord.js');
+
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
