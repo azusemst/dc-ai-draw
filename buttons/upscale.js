@@ -56,10 +56,8 @@ module.exports = {
               }
             }
           );
-
-          logger.info(JSON.stringify(output));
-
-          await interaction.editReply({ content: "Upscale result", files: output});  
+          const attachment = new MessageAttachment(Buffer.from(output), 'upscaled.png');
+          await interaction.editReply({ content: "Upscale result", files: [attachment] });
         });
     },
 }
