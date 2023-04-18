@@ -1,7 +1,7 @@
 const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = require('discord.js');
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
-import Replicate from "replicate";
+const Replicate = require('replicate');
 import logger from "../logger";
 
 const replicate = new Replicate({
