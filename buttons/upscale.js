@@ -3,8 +3,6 @@ const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const Replicate = require('replicate');
 const logger = require('../logger');
-const { MessageAttachment } = require('discord.js');
-
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
@@ -59,11 +57,10 @@ module.exports = {
             }
           );
 
-          console.log(output); // <-- 在这里打印输出
-          console.log(typeof output); // <-- 在这里打印输出类型
-
-          const attachment = new MessageAttachment(Buffer.from(output), 'upscaled.png');
-          await interaction.editReply({ content: "Upscale result", files: [attachment] });
+          logger.info(output); // <-- 在这里打印输出
+          await interaction.editReply({ content: "Upscale result", files: [
+            {attachment: output, name: "image.jpg"},
+            ] });
         });
     },
 }
