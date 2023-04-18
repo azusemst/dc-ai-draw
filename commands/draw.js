@@ -2,6 +2,8 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatI
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const deepl = require('deepl'); // 导入deepl模块
+const logger = require('../logger');
+
 
 async function translate_to_english(text) {
   // 判断字符串是否包含中文字符

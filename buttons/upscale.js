@@ -2,7 +2,7 @@ const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = requir
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const Replicate = require('replicate');
-import logger from "../logger";
+const logger = require('../logger');
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,

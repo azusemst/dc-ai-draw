@@ -2,6 +2,9 @@ const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = requir
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 
+const logger = require('../logger');
+
+
 module.exports = {
     data: {
         name: 'generateNew'
