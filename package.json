@@ -19,6 +19,7 @@
     "https": "^1.0.0",
     "keyv": "^4.5.2",
     "node-fetch": "^3.3.1",
-    "short-unique-id": "^4.4.4"
+    "short-unique-id": "^4.4.4",
+    "winston": "^3.8.2"
   }
 }
