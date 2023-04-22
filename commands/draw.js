@@ -69,7 +69,7 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction 
      */
     async execute(interaction) {
-        const keyv = new Keyv('redis://localhost:6379');
+        const keyv = new Keyv('redis://clustercfg.nonoko-redis.q7sou3.memorydb.ap-northeast-1.amazonaws.com:6379');
 
         const prompt = await translate_to_english(interaction.options.getString('prompt'));
         const batch_size = interaction.options.getInteger('pics') ?? 4; // default = 2
