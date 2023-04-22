@@ -17,7 +17,7 @@ module.exports = {
      async execute(interaction) {
         buttonId = interaction.component.customId;
         const old_uuid = buttonId.split('-')[1]
-        const keyv = new Keyv('redis://clustercfg.nonoko-redis.q7sou3.memorydb.ap-northeast-1.amazonaws.com:6379');
+        const keyv = new Keyv('rediss://clustercfg.nonoko-redis.q7sou3.memorydb.ap-northeast-1.amazonaws.com:6379');
         logger.info(`key:${old_uuid}`);
         const json = await keyv.get(old_uuid);
         logger.info(json);
