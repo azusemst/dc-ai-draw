@@ -125,7 +125,8 @@ module.exports = {
                 module: module,
                 model: model,
                 weight: weight,
-                resize_mode: resize_mode
+                resize_mode: resize_mode,
+                enabled: true
             }]
         }
 
@@ -147,7 +148,7 @@ module.exports = {
                 sampler_name: "DPM++ 2M Karras",
                 width: width,
                 height: height,
-                script_args: [{
+                alwayson_scripts: [{
                     controlnet: {
                         args: controlNetUnitArgs
                     }
