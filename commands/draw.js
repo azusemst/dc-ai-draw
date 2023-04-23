@@ -139,7 +139,7 @@ module.exports = {
 
         logger.info("start");
 
-        await interaction.deferUpdate();
+        await interaction.deferReply();
 
         if (enable_controlnet) {
             const response = await fetch(input_image);
