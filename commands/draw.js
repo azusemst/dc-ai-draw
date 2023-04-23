@@ -3,29 +3,31 @@ const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const deepl = require('deepl'); // 导入deepl模块
 const logger = require('../logger');
+const request = require('request');
+const fs = require('fs');
 
 
 async function translate_to_english(text) {
-  // 判断字符串是否包含中文字符
-  for (let char of text) {
-    if ('\u4e00' <= char && char <= '\u9fff') {
-      const api_key = 'd4462d35-a54d-0caa-ff7d-097b3812fc92:fx';
-      const resp = await fetch('https://api-free.deepl.com/v2/translate', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'DeepL-Auth-Key d4462d35-a54d-0caa-ff7d-097b3812fc92:fx',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `text=${text}&target_lang=EN-GB`
-    });
+    // 判断字符串是否包含中文字符
+    for (let char of text) {
+        if ('\u4e00' <= char && char <= '\u9fff') {
+            const api_key = 'd4462d35-a54d-0caa-ff7d-097b3812fc92:fx';
+            const resp = await fetch('https://api-free.deepl.com/v2/translate', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'DeepL-Auth-Key d4462d35-a54d-0caa-ff7d-097b3812fc92:fx',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `text=${text}&target_lang=EN-GB`
+            });
 
-    const translate = await resp.json();
-    logger.info(translate);
-    return translate.translations[0].text; // 返回翻译后的英文字符串
+            const translate = await resp.json();
+            logger.info(translate);
+            return translate.translations[0].text; // 返回翻译后的英文字符串
+        }
     }
-  }
-  return text; // 不包含中文，直接返回原字符串
-} 
+    return text; // 不包含中文，直接返回原字符串
+}
 
 
 module.exports = {
@@ -108,15 +110,50 @@ module.exports = {
         const resize_mode = interaction.getInteger('resize_mode') ?? 1;
 
         let controlNetUnitArgs;
-
+        let base64Image;
 
         logger.info("start");
 
         await interaction.deferReply();
 
         if (enable_controlnet) {
+            const imageFile = fs.createWriteStream('large-image.jpg');
+
+            // 发送 HTTP GET 请求获取图片数据
+            request.get(input_image)
+                .on('error', (err) => {
+                    logger.error(err);
+                })
+                .on('response', (response) => {
+                    // 获取响应头中的内容长度，以便后续处理
+                    const contentLength = response.headers['content-length'];
+                    logger.info(`Content length: ${contentLength}`);
+
+                    // 如果图片内容长度小于 10MB，则直接将其转成 base64 编码
+                    if (contentLength < 10 * 1024 * 1024) {
+                        let imageData = '';
+                        response.on('data', (chunk) => {
+                            imageData += chunk;
+                        });
+                        response.on('end', () => {
+                            base64Image = Buffer.from(imageData).toString('base64');
+                            logger.info(base64Image);
+                        });
+                    } else {
+                        // 否则使用流式传输将图片存储到本地文件系统，并在完成后读取并转成 base64 编码
+                        response.pipe(imageFile);
+                        imageFile.on('finish', () => {
+                            fs.readFile('large-image.jpg', (err, data) => {
+                                if (err) throw err;
+                                base64Image = Buffer.from(data).toString('base64');
+                                logger.info(base64Image);
+                            });
+                        });
+                    }
+                });
+
             controlNetUnitArgs = [{
-                input_image: input_image,
+                input_image: base64Image,
                 module: module,
                 model: model,
                 weight: weight,
@@ -156,11 +193,11 @@ module.exports = {
         const data = await response.json();
 
         const generateNewBtn = new ButtonBuilder()
-            .setCustomId(`generateNew-${uuid}`)    
+            .setCustomId(`generateNew-${uuid}`)
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
             .setEmoji('🔃');
-          
+
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn);
         logger.info(`key:${uuid}`);
@@ -170,13 +207,13 @@ module.exports = {
             const pic = data.images[i];
             keyv.set(`image-${uuid}-${i}`, pic);
             newBtn = new ButtonBuilder()
-            .setCustomId(`upscale-${uuid}-${i}`)    
-            .setLabel(`Upscale ${i}`)
-            .setStyle(ButtonStyle.Primary)
-            .setEmoji('⬆️');
+                .setCustomId(`upscale-${uuid}-${i}`)
+                .setLabel(`Upscale ${i}`)
+                .setStyle(ButtonStyle.Primary)
+                .setEmoji('⬆️');
             buff.push(Buffer.from(pic, 'base64'));
             actionRow.addComponents(newBtn);
         }
-        await interaction.editReply({ content: `${interaction.user.username}'s drawing:`, files: buff, components: [actionRow]});   
+        await interaction.editReply({ content: `${interaction.user.username}'s drawing:`, files: buff, components: [actionRow] });
     }
 }
