@@ -194,12 +194,14 @@ module.exports = {
             .setStyle(ButtonStyle.Primary)
             .setEmoji('🔃');
 
-        const actionRow = new ActionRowBuilder()
+        let actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn);
         logger.info(`key:${uuid}`);
         logger.info(data.parameters);
         const buff = [];
         logger.info(JSON.stringify(data));
+        let count = 0;
+        const actionRows = [];
         for (let i = 0; i < data.images.length; i++) {
             const pic = data.images[i];
             keyv.set(`image-${uuid}-${i}`, pic);
@@ -210,7 +212,19 @@ module.exports = {
                 .setEmoji('⬆️');
             buff.push(Buffer.from(pic, 'base64'));
             actionRow.addComponents(newBtn);
+            count++;
+            if (count === 4 || i === data.images.length - 1) {
+                // create new action row and add all buttons to it
+                const newActionRow = new MessageActionRow();
+                for (const component of actionRow.components) {
+                    newActionRow.addComponents(component);
+                }
+                actionRows.push(newActionRow);
+                // reset the count and action row
+                count = 0;
+                actionRow = new MessageActionRow();
+            }
         }
-        await interaction.editReply({ content: `${interaction.user.username}'s drawing:`, files: buff, components: [actionRow] });
+        await interaction.editReply({ content: `${interaction.user.username}'s drawing:`, files: buff, components: actionRows });
     }
 }
