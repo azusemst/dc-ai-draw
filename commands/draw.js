@@ -107,7 +107,7 @@ module.exports = {
         const module = interaction.options.getString('module') ?? "";
         const model = interaction.options.getString('model') ?? "";
         const weight = interaction.options.getNumber('weight') ?? 1;
-        const resize_mode = interaction.getInteger('resize_mode') ?? 1;
+        const resize_mode = interaction.options.getInteger('resize_mode') ?? 1;
 
         let controlNetUnitArgs;
         let base64Image;
