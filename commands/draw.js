@@ -3,7 +3,6 @@ const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const deepl = require('deepl'); // 导入deepl模块
 const logger = require('../logger');
-const request = require('request');
 const fs = require('fs');
 
 
@@ -118,6 +117,7 @@ module.exports = {
 
         if (enable_controlnet) {
             const imageFile = fs.createWriteStream('large-image.jpg');
+            var request = require('request');
 
             // 发送 HTTP GET 请求获取图片数据
             request.get(input_image)
