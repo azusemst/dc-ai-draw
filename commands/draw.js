@@ -120,35 +120,11 @@ module.exports = {
             var _request = require('request');
 
             // 发送 HTTP GET 请求获取图片数据
-            _request.get(input_image)
-                .on('error', (err) => {
-                    logger.error(err);
-                })
-                .on('response', (response) => {
-                    // 获取响应头中的内容长度，以便后续处理
-                    const contentLength = response.headers['content-length'];
-                    logger.info(`Content length: ${contentLength}`);
-
-                    // 如果图片内容长度小于 10MB，则直接将其转成 base64 编码
-                    if (contentLength < 10 * 1024 * 1024) {
-                        let imageData = '';
-                        response.on('data', (chunk) => {
-                            imageData += chunk;
-                        });
-                        response.on('end', () => {
-                            base64Image = Buffer.from(imageData).toString('base64');
-                        });
-                    } else {
-                        // 否则使用流式传输将图片存储到本地文件系统，并在完成后读取并转成 base64 编码
-                        response.pipe(imageFile);
-                        imageFile.on('finish', () => {
-                            fs.readFile('large-image.jpg', (err, data) => {
-                                if (err) throw err;
-                                base64Image = Buffer.from(data).toString('base64');
-                            });
-                        });
-                    }
-                });
+            const imageData = await _request.get({
+                uri: input_image,
+                encoding: null // 禁止自动解码响应数据为字符串
+              });
+            const base64Image = Buffer.from(imageData).toString('base64');
 
             controlNetUnitArgs = [{
                 input_image: base64Image,
