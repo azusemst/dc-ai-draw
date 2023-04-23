@@ -119,12 +119,19 @@ module.exports = {
             const imageFile = fs.createWriteStream('large-image.jpg');
             var _request = require('request');
 
-            // 发送 HTTP GET 请求获取图片数据
-            const imageData = await _request.get({
-                uri: input_image,
-                encoding: null // 禁止自动解码响应数据为字符串
+            const imageData = await new Promise((resolve, reject) => {
+                request({
+                  url: input_image,
+                  encoding: null // 禁止自动解码响应数据为字符串
+                }, (error, response, body) => {
+                  if (error) {
+                    reject(error);
+                  } else {
+                    resolve(body);
+                  }
+                });
               });
-            const base64Image = Buffer.from(imageData).toString('base64');
+              const base64Image = Buffer.from(imageData).toString('base64');
 
             controlNetUnitArgs = [{
                 input_image: base64Image,
