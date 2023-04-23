@@ -116,22 +116,9 @@ module.exports = {
         await interaction.deferReply();
 
         if (enable_controlnet) {
-            const imageFile = fs.createWriteStream('large-image.jpg');
-            var _request = require('request');
-
-            const imageData = await new Promise((resolve, reject) => {
-                request({
-                  url: input_image,
-                  encoding: null // 禁止自动解码响应数据为字符串
-                }, (error, response, body) => {
-                  if (error) {
-                    reject(error);
-                  } else {
-                    resolve(body);
-                  }
-                });
-              });
-              const base64Image = Buffer.from(imageData).toString('base64');
+            const response = await fetch(input_image);
+            const imageData = await response.buffer(); // 获取响应体的二进制数据，以 Buffer 对象形式返回
+            const base64Image = imageData.toString('base64');
 
             controlNetUnitArgs = [{
                 input_image: base64Image,
