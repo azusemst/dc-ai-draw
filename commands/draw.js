@@ -38,7 +38,29 @@ module.exports = {
             .setName('height')
             .setDescription('height')
             .setMinValue(1)
-            .setMaxValue(1024)),
+            .setMaxValue(1024))
+        .addBooleanOption(option => option
+            .setName('enable_controlnet')
+            .setDescription('enable controlnet, default: false, currently support 1'))
+        .addStringOption(option => option
+            .setName('input_image')
+            .setDescription('input image url for control net'))
+        .addStringOption(option => option
+            .setName('module')
+            .setDescription('module used for controlnet preprocessing'))
+        .addStringOption(option => option
+            .setName('model')
+            .setDescription('model used for controlnet'))
+        .addNumberOption(option => option
+            .setName('weight')
+            .setDescription('weight for this controlnet unit, default: 1')
+            .setMinValue(0))
+        .addIntegerOption(option => option
+            .setName('resize_mode')
+            .setDescription('how to resize the input image so as to fit the output resolution of the generation.')
+            .setMaxValue(2)
+            .setMinValue(0)),
+    // 别的controlnet参数先不加了
     /**
      * 
      * @param {ChatInputCommandInteraction} interaction 
@@ -53,12 +75,29 @@ module.exports = {
         const negative_prompt = interaction.options.getString('negative') ?? "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry";
         const width = interaction.options.getInteger('width') ?? 512;
         const height = interaction.options.getInteger('height') ?? 768;
+        const enable_controlnet = interaction.options.getBoolean('enable_controlnet') ?? false;
+        const input_image = interaction.options.getString('input_image') ?? "";
+        const module = interaction.options.getString('module') ?? "";
+        const model = interaction.options.getString('model') ?? "";
+        const weight = interaction.options.getNumber('weight') ?? 1;
+        const resize_mode = interaction.getInteger('resize_mode') ?? 1;
+
+        let controlNetUnitArgs;
+
 
         console.log("start");
 
         await interaction.deferReply();
 
-
+        if (enable_controlnet) {
+            controlNetUnitArgs = [{
+                input_image: input_image,
+                module: module,
+                model: model,
+                weight: weight,
+                resize_mode: resize_mode
+            }]
+        }
 
         const request = {
             method: "POST",
@@ -77,7 +116,12 @@ module.exports = {
                 hr_upscaler: "Nearest",
                 sampler_name: "DPM++ 2M Karras",
                 width: width,
-                height: height
+                height: height,
+                alwayson_scripts: {
+                    controlnet: {
+                        args: controlNetUnitArgs
+                    }
+                }
             })
         };
         const uid = new ShortUniqueId();
