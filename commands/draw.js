@@ -147,11 +147,12 @@ module.exports = {
                 sampler_name: "DPM++ 2M Karras",
                 width: width,
                 height: height,
-                alwayson_scripts: {
+                script_args: [{
                     controlnet: {
                         args: controlNetUnitArgs
                     }
                 }
+                ]
             })
         };
         const uid = new ShortUniqueId();
