@@ -73,10 +73,36 @@ module.exports = {
             .setDescription('input image url for control net'))
         .addStringOption(option => option
             .setName('module')
-            .setDescription('module used for controlnet preprocessing'))
+            .setDescription('module used for controlnet preprocessing')
+            .addChoices(
+                {name: 'canny', value: 'canny'},
+                {name: 'depth', value: 'depth'},
+                {name: 'hed', value: 'hed'},
+                {name: 'mlsd', value: 'mlsd'},
+                {name: 'normal_map', value: 'normal_map'},
+                {name: 'openpose', value: 'openpose'},
+                {name: 'openpose_hand', value: 'openpose_hand'},
+                {name: 'openpose_face', value: 'openpose_face'},
+                {name: 'openpose_faceonly', value: 'openpose_faceonly'},
+                {name: 'openpose_full', value: 'openpose_full'},
+                {name: 'pidinet_scribble', value: 'pidinet_scribble'},
+                {name: 'scribble_xdog', value: 'scribble_xdog'},
+                {name: 'scribble_hed', value: 'scribble_hed'},
+                {name: 'segmentation', value: 'segmentation'}
+            ))
         .addStringOption(option => option
             .setName('model')
-            .setDescription('model used for controlnet'))
+            .setDescription('model used for controlnet')
+            .addChoices(
+                {name:'control_canny-fp16 [e3fe7712]', value: 'control_canny-fp16 [e3fe7712]'},
+                {name: 'control_depth-fp16 [400750f6]', value: 'control_depth-fp16 [400750f6]'},
+                {name: 'control_hed-fp16 [13fee50b]', value: 'control_hed-fp16 [13fee50b]'},
+                {name: 'control_mlsd-fp16 [e3705cfa]', value: 'control_mlsd-fp16 [e3705cfa]'},
+                {name: 'control_normal-fp16 [e3b0c442]', value: 'control_normal-fp16 [e3b0c442]'},
+                {name: 'control_openpose-fp16 [9ca67cc5]', value: 'control_openpose-fp16 [9ca67cc5]'},
+                {name: 'control_scribble-fp16 [c508311e]', value: 'control_scribble-fp16 [c508311e]'},
+                {name: 'control_seg-fp16 [b9c1cc12]', value: 'control_seg-fp16 [b9c1cc12]'}
+            ))
         .addNumberOption(option => option
             .setName('weight')
             .setDescription('weight for this controlnet unit, default: 1')
