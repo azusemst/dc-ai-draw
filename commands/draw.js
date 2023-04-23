@@ -137,7 +137,6 @@ module.exports = {
                         });
                         response.on('end', () => {
                             base64Image = Buffer.from(imageData).toString('base64');
-                            logger.info(base64Image);
                         });
                     } else {
                         // 否则使用流式传输将图片存储到本地文件系统，并在完成后读取并转成 base64 编码
@@ -146,7 +145,6 @@ module.exports = {
                             fs.readFile('large-image.jpg', (err, data) => {
                                 if (err) throw err;
                                 base64Image = Buffer.from(data).toString('base64');
-                                logger.info(base64Image);
                             });
                         });
                     }
@@ -189,6 +187,7 @@ module.exports = {
         const uid = new ShortUniqueId();
         const uuid = uid();
         keyv.set(uuid, request.body);
+        logger.info(request.body);
         const response = await fetch('http://121.41.44.246:8080/sdapi/v1/txt2img', request);
         const data = await response.json();
 
