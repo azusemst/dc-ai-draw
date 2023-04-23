@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatInputCommandInteraction, MessageActionRow } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatInputCommandInteraction } = require('discord.js');
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const deepl = require('deepl'); // 导入deepl模块
@@ -215,16 +215,14 @@ module.exports = {
             count++;
             if (count === 4 || i === data.images.length - 1) {
                 // create new action row and add all buttons to it
-                const newActionRow = new MessageActionRow();
-                for (const component of actionRow.components) {
-                    newActionRow.addComponents(component);
-                }
+                const newActionRow = actionRow.toJSON();
                 actionRows.push(newActionRow);
                 // reset the count and action row
                 count = 0;
-                actionRow = new MessageActionRow();
+                actionRow = new ActionRowBuilder();
             }
         }
         await interaction.editReply({ content: `${interaction.user.username}'s drawing:`, files: buff, components: actionRows });
+
     }
 }
