@@ -200,7 +200,7 @@ module.exports = {
         logger.info(`key:${uuid}`);
         logger.info(data.parameters);
         const buff = [];
-        logger.info(Json.stringify(data));
+        logger.info(JSON.stringify(data));
         for (let i = 0; i < data.images.length; i++) {
             const pic = data.images[i];
             keyv.set(`image-${uuid}-${i}`, pic);
