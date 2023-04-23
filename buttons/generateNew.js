@@ -2,6 +2,9 @@ const {ButtonBuilder, ButtonInteraction, ButtonStyle, ActionRowBuilder} = requir
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 
+const logger = require('../logger');
+
+
 module.exports = {
     data: {
         name: 'generateNew'
@@ -14,12 +17,12 @@ module.exports = {
      async execute(interaction) {
         buttonId = interaction.component.customId;
         const old_uuid = buttonId.split('-')[1]
-        const keyv = new Keyv('redis://localhost:6379');
-        console.log(`key:${old_uuid}`);
+        const keyv = new Keyv('rediss://clustercfg.nonoko-redis.q7sou3.memorydb.ap-northeast-1.amazonaws.com:6379');
+        logger.info(`key:${old_uuid}`);
         const json = await keyv.get(old_uuid);
-        console.log(json);
+        logger.info(json);
 
-        console.log("start generate");
+        logger.info("start generate");
 
         await interaction.deferUpdate();
 
@@ -48,7 +51,7 @@ module.exports = {
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn)
 
-        console.log(data.parameters);
+        logger.info(data.parameters);
         const buff = [];
         for (let i = 0; i < data.images.length; i++) {
             const pic = data.images[i];

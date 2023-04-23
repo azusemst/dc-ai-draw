@@ -1,6 +1,31 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatInputCommandInteraction } = require('discord.js');
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
+const deepl = require('deepl'); // 导入deepl模块
+const logger = require('../logger');
+
+
+async function translate_to_english(text) {
+  // 判断字符串是否包含中文字符
+  for (let char of text) {
+    if ('\u4e00' <= char && char <= '\u9fff') {
+      const api_key = 'd4462d35-a54d-0caa-ff7d-097b3812fc92:fx';
+      const resp = await fetch('https://api-free.deepl.com/v2/translate', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'DeepL-Auth-Key d4462d35-a54d-0caa-ff7d-097b3812fc92:fx',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `text=${text}&target_lang=EN-GB`
+    });
+
+    const translate = await resp.json();
+    logger.info(translate);
+    return translate.translations[0].text; // 返回翻译后的英文字符串
+    }
+  }
+  return text; // 不包含中文，直接返回原字符串
+} 
 
 
 module.exports = {
@@ -66,9 +91,9 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction 
      */
     async execute(interaction) {
-        const keyv = new Keyv('redis://localhost:6379');
+        const keyv = new Keyv('rediss://clustercfg.nonoko-redis.q7sou3.memorydb.ap-northeast-1.amazonaws.com:6379');
 
-        const prompt = interaction.options.getString('prompt');
+        const prompt = await translate_to_english(interaction.options.getString('prompt'));
         const batch_size = interaction.options.getInteger('pics') ?? 4; // default = 2
         const steps = interaction.options.getInteger('steps') ?? 20;
         const denoising = interaction.options.getNumber('denoising') ?? 0.7;
@@ -85,7 +110,7 @@ module.exports = {
         let controlNetUnitArgs;
 
 
-        console.log("start");
+        logger.info("start");
 
         await interaction.deferReply();
 
@@ -138,8 +163,8 @@ module.exports = {
           
         const actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn);
-        console.log(`key:${uuid}`);
-        console.log(data.parameters);
+        logger.info(`key:${uuid}`);
+        logger.info(data.parameters);
         const buff = [];
         for (let i = 0; i < data.images.length; i++) {
             const pic = data.images[i];
@@ -152,6 +177,6 @@ module.exports = {
             buff.push(Buffer.from(pic, 'base64'));
             actionRow.addComponents(newBtn);
         }
-        await interaction.editReply({ content: prompt, files: buff, components: [actionRow]});   
+        await interaction.editReply({ content: `${interaction.user.username}'s drawing:`, files: buff, components: [actionRow]});   
     }
 }
