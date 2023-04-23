@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatInputCommandInteraction } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder, ChatInputCommandInteraction, MessageActionRow } = require('discord.js');
 const ShortUniqueId = require('short-unique-id');
 const Keyv = require('keyv');
 const deepl = require('deepl'); // 导入deepl模块
