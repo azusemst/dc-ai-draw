@@ -117,10 +117,10 @@ module.exports = {
 
         if (enable_controlnet) {
             const imageFile = fs.createWriteStream('large-image.jpg');
-            var request = require('request');
+            var _request = require('request');
 
             // 发送 HTTP GET 请求获取图片数据
-            request.get(input_image)
+            _request.get(input_image)
                 .on('error', (err) => {
                     logger.error(err);
                 })
