@@ -42,29 +42,45 @@ module.exports = {
         const uid = new ShortUniqueId();
         const uuid = uid();
 
+        if(!data.hasOwnProperty('images')) {
+            await interaction.editReply({ content: `${interaction.user.username}'s drawing failed: ${JSON.stringify(data)}`});
+            return;
+        }
+
         const generateNewBtn = new ButtonBuilder()
             .setCustomId(`generateNew-${uuid}`)    
             .setLabel('Generate New')
             .setStyle(ButtonStyle.Primary)
             .setEmoji('🔃');
         
-        const actionRow = new ActionRowBuilder()
+        let actionRow = new ActionRowBuilder()
             .addComponents(generateNewBtn)
 
         logger.info(data.parameters);
         const buff = [];
+        const actionRows = [];
+        let count = 0;
         for (let i = 0; i < data.images.length; i++) {
             const pic = data.images[i];
             keyv.set(`image-${uuid}-${i}`, pic);
             newBtn = new ButtonBuilder()
-            .setCustomId(`upscale-${uuid}-${i}`)    
-            .setLabel(`Upscale ${i}`)
-            .setStyle(ButtonStyle.Primary)
-            .setEmoji('⬆️');
+                .setCustomId(`upscale-${uuid}-${i}`)
+                .setLabel(`Upscale ${i}`)
+                .setStyle(ButtonStyle.Primary)
+                .setEmoji('⬆️');
             buff.push(Buffer.from(pic, 'base64'));
             actionRow.addComponents(newBtn);
+            count++;
+            if (count === 4 || i === data.images.length - 1) {
+                // create new action row and add all buttons to it
+                const newActionRow = actionRow.toJSON();
+                actionRows.push(newActionRow);
+                // reset the count and action row
+                count = 0;
+                actionRow = new ActionRowBuilder();
+            }
         }
-        await interaction.editReply({ content: "generated new:", files: buff, components: [actionRow] });   
+        await interaction.editReply({ content: "generated new:", files: buff, components: actionRows });   
         keyv.set(uuid, json);
     }
 }
