@@ -71,6 +71,9 @@ module.exports = {
         .addStringOption(option => option
             .setName('input_image')
             .setDescription('input image url for control net'))
+        .addBooleanOption(option => option
+            .setName('guessmode')
+            .setDescription('use guess mode'))
         .addStringOption(option => option
             .setName('module')
             .setDescription('module used for controlnet preprocessing')
@@ -133,6 +136,7 @@ module.exports = {
         const model = interaction.options.getString('model') ?? "";
         const weight = interaction.options.getNumber('weight') ?? 1;
         const resize_mode = interaction.options.getInteger('resize_mode') ?? 1;
+        const guessmode = interaction.options.getBoolean('guessmode') ?? false;
 
         let controlNetUnitArgs;
         let base64Image;
@@ -142,18 +146,26 @@ module.exports = {
         await interaction.deferReply();
 
         if (enable_controlnet) {
-            const response = await fetch(input_image);
-            const imageData = await response.arrayBuffer(); // 获取响应体的二进制数据，以 Buffer 对象形式返回
-            const base64Image = Buffer.from(imageData).toString('base64');
-
-            controlNetUnitArgs = [{
-                input_image: base64Image,
-                module: module,
-                model: model,
-                weight: weight,
-                resize_mode: resize_mode,
-                enabled: true
-            }]
+            try {
+                const response = await fetch(input_image);
+                const imageData = await response.arrayBuffer(); // 获取响应体的二进制数据，以 Buffer 对象形式返回
+                const base64Image = Buffer.from(imageData).toString('base64');
+    
+                controlNetUnitArgs = [{
+                    input_image: base64Image,
+                    module: module,
+                    model: model,
+                    weight: weight,
+                    resize_mode: resize_mode,
+                    enabled: true,
+                    guessmode: guessmode
+                }]
+            } catch (error) {
+                logger.error("error fetching input image");
+                logger.error({ stack: error.stack });
+                await interaction.editReply({content: 'error fetching input image'});
+                return;
+            }
         }
 
         const request = {

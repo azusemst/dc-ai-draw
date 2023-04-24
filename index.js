@@ -17,7 +17,7 @@ for (const file of commandFiles) {
     if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
     } else {
-        logger.info(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        logger.warn(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
     }
 }
 
@@ -32,7 +32,7 @@ for (const file of buttonFiles) {
     if ('data' in button && 'execute' in button) {
         client.buttons.set(button.data.name, button);
     } else {
-        logger.info(`[WARNING] The button at ${filePath} is missing a required "data" or "execute" property.`);
+        logger.warn(`[WARNING] The button at ${filePath} is missing a required "data" or "execute" property.`);
     }
 }
 
