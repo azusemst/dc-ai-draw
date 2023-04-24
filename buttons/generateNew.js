@@ -59,6 +59,7 @@ module.exports = {
         logger.info(data.parameters);
         const buff = [];
         const actionRows = [];
+        let count = 0;
         for (let i = 0; i < data.images.length; i++) {
             const pic = data.images[i];
             keyv.set(`image-${uuid}-${i}`, pic);
