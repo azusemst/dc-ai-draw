@@ -200,6 +200,10 @@ module.exports = {
         logger.info(data.parameters);
         const buff = [];
         logger.info(JSON.stringify(data));
+        if(!data.hasOwnProperty('images')) {
+            await interaction.editReply({ content: `${interaction.user.username}'s drawing failed: ${JSON.stringify(data)}`});
+            return;
+        }
         let count = 0;
         const actionRows = [];
         for (let i = 0; i < data.images.length; i++) {
