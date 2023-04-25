@@ -14,7 +14,7 @@ async function translate_to_english(text) {
             const resp = await fetch('https://api-free.deepl.com/v2/translate', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'DeepL-Auth-Key d4462d35-a54d-0caa-ff7d-097b3812fc92:fx',
+                    'Authorization': process.env.DEEPL_AUTH, // TODO: 建议把key放到env里
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: `text=${text}&target_lang=EN-GB`
@@ -78,33 +78,33 @@ module.exports = {
             .setName('module')
             .setDescription('module used for controlnet preprocessing')
             .addChoices(
-                {name: 'canny', value: 'canny'},
-                {name: 'depth', value: 'depth'},
-                {name: 'hed', value: 'hed'},
-                {name: 'mlsd', value: 'mlsd'},
-                {name: 'normal_map', value: 'normal_map'},
-                {name: 'openpose', value: 'openpose'},
-                {name: 'openpose_hand', value: 'openpose_hand'},
-                {name: 'openpose_face', value: 'openpose_face'},
-                {name: 'openpose_faceonly', value: 'openpose_faceonly'},
-                {name: 'openpose_full', value: 'openpose_full'},
-                {name: 'pidinet_scribble', value: 'pidinet_scribble'},
-                {name: 'scribble_xdog', value: 'scribble_xdog'},
-                {name: 'scribble_hed', value: 'scribble_hed'},
-                {name: 'segmentation', value: 'segmentation'}
+                { name: 'canny', value: 'canny' },
+                { name: 'depth', value: 'depth' },
+                { name: 'hed', value: 'hed' },
+                { name: 'mlsd', value: 'mlsd' },
+                { name: 'normal_map', value: 'normal_map' },
+                { name: 'openpose', value: 'openpose' },
+                { name: 'openpose_hand', value: 'openpose_hand' },
+                { name: 'openpose_face', value: 'openpose_face' },
+                { name: 'openpose_faceonly', value: 'openpose_faceonly' },
+                { name: 'openpose_full', value: 'openpose_full' },
+                { name: 'pidinet_scribble', value: 'pidinet_scribble' },
+                { name: 'scribble_xdog', value: 'scribble_xdog' },
+                { name: 'scribble_hed', value: 'scribble_hed' },
+                { name: 'segmentation', value: 'segmentation' }
             ))
         .addStringOption(option => option
             .setName('model')
             .setDescription('model used for controlnet')
             .addChoices(
-                {name:'control_canny-fp16 [e3fe7712]', value: 'control_canny-fp16 [e3fe7712]'},
-                {name: 'control_depth-fp16 [400750f6]', value: 'control_depth-fp16 [400750f6]'},
-                {name: 'control_hed-fp16 [13fee50b]', value: 'control_hed-fp16 [13fee50b]'},
-                {name: 'control_mlsd-fp16 [e3705cfa]', value: 'control_mlsd-fp16 [e3705cfa]'},
-                {name: 'control_normal-fp16 [e3b0c442]', value: 'control_normal-fp16 [e3b0c442]'},
-                {name: 'control_openpose-fp16 [9ca67cc5]', value: 'control_openpose-fp16 [9ca67cc5]'},
-                {name: 'control_scribble-fp16 [c508311e]', value: 'control_scribble-fp16 [c508311e]'},
-                {name: 'control_seg-fp16 [b9c1cc12]', value: 'control_seg-fp16 [b9c1cc12]'}
+                { name: 'control_canny-fp16 [e3fe7712]', value: 'control_canny-fp16 [e3fe7712]' },
+                { name: 'control_depth-fp16 [400750f6]', value: 'control_depth-fp16 [400750f6]' },
+                { name: 'control_hed-fp16 [13fee50b]', value: 'control_hed-fp16 [13fee50b]' },
+                { name: 'control_mlsd-fp16 [e3705cfa]', value: 'control_mlsd-fp16 [e3705cfa]' },
+                { name: 'control_normal-fp16 [e3b0c442]', value: 'control_normal-fp16 [e3b0c442]' },
+                { name: 'control_openpose-fp16 [9ca67cc5]', value: 'control_openpose-fp16 [9ca67cc5]' },
+                { name: 'control_scribble-fp16 [c508311e]', value: 'control_scribble-fp16 [c508311e]' },
+                { name: 'control_seg-fp16 [b9c1cc12]', value: 'control_seg-fp16 [b9c1cc12]' }
             ))
         .addNumberOption(option => option
             .setName('weight')
@@ -124,33 +124,48 @@ module.exports = {
         const keyv = new Keyv('rediss://clustercfg.nonoko-redis.q7sou3.memorydb.ap-northeast-1.amazonaws.com:6379');
 
         const prompt = await translate_to_english(interaction.options.getString('prompt'));
-        const batch_size = interaction.options.getInteger('pics') ?? 4; // default = 2
+        const batch_size = interaction.options.getInteger('pics') ?? 4;
         const steps = interaction.options.getInteger('steps') ?? 20;
         const denoising = interaction.options.getNumber('denoising') ?? 0.7;
         const negative_prompt = interaction.options.getString('negative') ?? "lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry";
         const width = interaction.options.getInteger('width') ?? 512;
         const height = interaction.options.getInteger('height') ?? 768;
-        const enable_controlnet = interaction.options.getBoolean('enable_controlnet') ?? false;
-        const input_image = interaction.options.getString('input_image') ?? "";
+        const enable_controlnet = interaction.options.getBoolean('enable_controlnet');
+        const input_image = interaction.options.getString('input_image');
         const module = interaction.options.getString('module') ?? "";
         const model = interaction.options.getString('model') ?? "";
         const weight = interaction.options.getNumber('weight') ?? 1;
         const resize_mode = interaction.options.getInteger('resize_mode') ?? 1;
         const guessmode = interaction.options.getBoolean('guessmode') ?? false;
-
-        let controlNetUnitArgs;
-        let base64Image;
+        const check_model = {
+            'control_canny-fp16 [e3fe7712]': ['canny'],
+            'control_depth-fp16 [400750f6]': ['depth'],
+            'control_hed-fp16 [13fee50b]': ['hed'],
+            'control_mlsd-fp16 [e3705cfa]': ['mlsd'],
+            'control_normal-fp16 [e3b0c442]': ['normal_map'],
+            'control_openpose-fp16 [9ca67cc5]': ['openpose', 'openpose_hand', 'openpose_face', 'openpose_faceonly', 'openpose_full'],
+            'control_scribble-fp16 [c508311e]': ['pidinet_scribble', 'scribble_xdog', 'scribble_hed'],
+            'control_seg-fp16 [b9c1cc12]': ['segmentation']
+        }
+        if (!check_model[model].includes(module)) {
+            await interaction.reply('model和module不匹配');
+            return;
+        }
+        if (enable_controlnet && !input_image) {
+            await interaction.reply('ControlNet未提交input_image');
+            return;
+        }
+        await interaction.deferReply();
 
         logger.info("start");
-
-        await interaction.deferReply();
+        let controlNetUnitArgs;
 
         if (enable_controlnet) {
             try {
                 const response = await fetch(input_image);
                 const imageData = await response.arrayBuffer(); // 获取响应体的二进制数据，以 Buffer 对象形式返回
                 const base64Image = Buffer.from(imageData).toString('base64');
-    
+
                 controlNetUnitArgs = [{
                     input_image: base64Image,
                     module: module,
@@ -163,7 +178,7 @@ module.exports = {
             } catch (error) {
                 logger.error("error fetching input image");
                 logger.error({ stack: error.stack });
-                await interaction.editReply({content: 'error fetching input image'});
+                await interaction.editReply({ content: 'error fetching input image' });
                 return;
             }
         }
@@ -212,8 +227,8 @@ module.exports = {
         logger.info(data.parameters);
         const buff = [];
         logger.info(JSON.stringify(data));
-        if(!data.hasOwnProperty('images')) {
-            await interaction.editReply({ content: `${interaction.user.username}'s drawing failed: ${JSON.stringify(data)}`});
+        if (!data.hasOwnProperty('images')) {
+            await interaction.editReply({ content: `${interaction.user.username}'s drawing failed: ${JSON.stringify(data)}` });
             return;
         }
         let count = 0;
