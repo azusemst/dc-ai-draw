@@ -1,4 +1,6 @@
 const { Events } = require('discord.js');
+const logger = require('../logger');
+
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -12,18 +14,18 @@ module.exports = {
             }
 
             try {
-                console.log(`Executing command ${interaction.commandName}...`);
+                logger.info(`Executing command ${interaction.commandName}...`);
                 await command.execute(interaction);
-                console.log('Executed command!')
+                logger.info('Executed command!')
             } catch (error) {
                 console.error(`Error executing ${interaction.commandName}`);
                 console.error(error);
             }
         } else if (interaction.isButton()) {
-            console.log(`button clicked: ${interaction.component.customId}`);
+            logger.info(`button clicked: ${interaction.component.customId}`);
             buttonId = interaction.component.customId;
             buttonName = buttonId.split('-')
-            console.log(buttonName)
+            logger.info(buttonName)
 
 
             const button = interaction.client.buttons.get(buttonName[0]);
@@ -33,9 +35,9 @@ module.exports = {
             }
 
             try {
-                console.log(`Executing button ${interaction.component.customId}...`);
+                logger.info(`Executing button ${interaction.component.customId}...`);
                 await button.execute(interaction);
-                console.log('Executed button!')
+                logger.info('Executed button!')
             } catch (error) {
                 console.error(`Error executing ${interaction.component.customId}`);
                 console.error(error);
